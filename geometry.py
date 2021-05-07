@@ -3,9 +3,10 @@ from __future__ import annotations
 import math
 import logging
 
+logger = logging.getLogger(__name__)
+
 EPS = 1.0e-6
 INF = float("infinity")
-logger = logging.getLogger(__name__)
 
 class Point(object):
     """
@@ -18,7 +19,7 @@ class Point(object):
         pass
 
     def __repr__(self):
-        return "<Point x={}, y={}>".format(self.x, self.y)
+        return f"<Point {self.x=:.3f}, {self.y=:.3f}>"
 
     def __eq__(self, other):
         return tuple(self) == tuple(other)
@@ -130,7 +131,7 @@ class Line(object):
         return abs((point-self.p1).det(self.p2-self.p1) / abs(self.p2-self.p1))
 
     def __repr__(self):
-        return f"<Line defined by ({self.p1}, {self.p2})>"
+        return f"<Line defined by ({self.p1:.3f}, {self.p2:.3f})>"
 
 
 class Segment(Line):

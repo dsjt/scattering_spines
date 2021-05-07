@@ -5,16 +5,20 @@ import matplotlib
 import matplotlib.pyplot as plt
 import logging
 import math
-import random
 from spine import Spine
-from utils import myFigure
-from general import random_spines
+from general import random_spines, display
 from contact_manager import ContactManager
+from relaxation import relaxation
 
 logging.basicConfig(level=logging.WARNING)
+logger_levels = {
+    "main": logging.DEBUG,
+    "relaxation": logging.DEBUG
+}
+for mn, level in logger_levels.items():
+    logging.getLogger(mn).setLevel(level)
+
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-# random.seed(0)
 
 def main():
     # 平面のサイズ
@@ -24,33 +28,9 @@ def main():
     # 針の本数
     N = 10
 
-    spines = random_spines(H, W, L, N)
-    cm = ContactManager()
-    for spine in spines:
-        cm.register(spine)
-
-    for obj1, obj2 in cm.contact_pairs():
-        logger.debug(f"overlapping {obj1}, {obj2}")
+    spines = relaxation(H, W, L, N)
 
     display(H, W, spines)
-    return
-
-
-def display(h, w, spines: list[Spine], fn="tmp.png"):
-    with myFigure(fn=fn) as fig:
-        ax = fig.add_subplot(1, 1, 1, aspect="equal")
-        for spine in spines:
-            spine.plot(ax, color="black")
-
-        # 外枠
-        r = matplotlib.patches.Rectangle(xy=(0, 0), width=w, height=h,
-                                         ec='#000000', linestyle=":", fill=False)
-        ax.add_patch(r)
-
-        # 表示範囲
-        rep_spine = spines[0]
-        ax.set_xlim(-rep_spine.l/2, w+rep_spine.l/2)
-        ax.set_ylim(-rep_spine.l/2, h+rep_spine.l/2)
     return
 
 

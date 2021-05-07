@@ -23,3 +23,11 @@ class myFigure(matplotlib.figure.Figure):
             print("Error has occurred.")
             print(exception_type, exception_value, traceback)
         return
+
+def sign(x):
+    if x < 0:
+        return -1
+    elif x > 0:
+        return 1
+    else:
+        return 0

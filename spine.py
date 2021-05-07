@@ -37,12 +37,13 @@ class Spine(Segment):
         if l is not None:
             self.l = l
 
-        dp = Point(math.cos(theta)*l/2, math.sin(theta)*l/2)
-        self.p1 = center+dp
-        self.p2 = center-dp
+        dp = Point(math.cos(self.theta)*self.l/2,
+                   math.sin(self.theta)*self.l/2)
+        self.p1 = self.center+dp
+        self.p2 = self.center-dp
         return
 
-    def plot(self, ax: matplotlib.axes, **kwargs):
+    def plot(self, ax, **kwargs):
         ax.plot(self.center.x, self.center.y, marker=".", **kwargs)
         if self.identifier is not None:
             ax.annotate(self.identifier, xy=(self.center.x, self.center.y))
@@ -58,7 +59,10 @@ class Spine(Segment):
             return True
 
     def __repr__(self):
-        if self.identifier is not None:
-            return f"<Spine {self.identifier=}>"
-        else:
-            return super().__repr__()
+        return f"<Spine {self.identifier=}, ({self.center}, {self.theta=:.3f}, {self.l=:.3f})>"
+
+    def __iadd__(self, other):
+        self.update(self.center+other.center,
+                    self.theta+other.theta,
+                    self.l + other.l)
+        return self
