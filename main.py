@@ -8,7 +8,7 @@ import math
 import random
 from spine import Spine
 from utils import myFigure
-from geometry import Point
+from general import random_spines
 from contact_manager import ContactManager
 
 logging.basicConfig(level=logging.WARNING)
@@ -34,20 +34,6 @@ def main():
 
     display(H, W, spines)
     return
-
-def random_spines(H, W, L, N) -> list[Spine]:
-    """
-    交差を許してランダムに針の位置を決める。
-    """
-    ret = []
-    for i in range(N):
-        x = random.uniform(0, W)
-        y = random.uniform(0, H)
-        center = Point(x, y)
-        theta = random.uniform(0, math.pi)
-        logger.debug(f"random_spines {i}th {x=:.3f}, {y=:.3f}, {theta=:.3f}")
-        ret.append(Spine(center, theta, L, identifier=f"{i}"))
-    return ret
 
 
 def display(h, w, spines: list[Spine], fn="tmp.png"):

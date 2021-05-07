@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
+# このリポジトリに拘らず利用しやすいユーティリティ関数等
 import matplotlib
 import matplotlib.pyplot as plt
 import logging
 
 logger = logging.getLogger(__name__)
-
 
 class myFigure(matplotlib.figure.Figure):
     def __init__(self, fn, **kwargs):
