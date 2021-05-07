@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 import logging
 import geometry
 from collections import defaultdict
 from spine import Spine
 from utils import sign
-from general import random_spines, display
+from general import random_spines, display, spines_plot
 from geometry import Point, iSP
 from contact_manager import ContactManager
 
@@ -26,8 +29,8 @@ def relaxation(H, W, L, N) -> list[Spine]:
     # 更新量を制御するグローバルパラメータ
     pos_epsilon = 0.1
     angle_epsilon = 0.1
-    # 最大反復回数を制御するoグローバルパラメータ
-    max_iteration = 10
+    # 最大反復回数を制御するグローバルパラメータ
+    max_iteration = 50
 
     # ランダムな生成
     spines = random_spines(H, W, L, N)
@@ -35,12 +38,17 @@ def relaxation(H, W, L, N) -> list[Spine]:
     for spine in spines:
         cm.register(spine)
 
+    fig = plt.figure(figsize=(8, 6))
+    frames = []
     cp = list(cm.contact_pairs())
     for epoch in range(max_iteration):
         logger.debug(f"{epoch=}")
-        display(H, W, spines, fn=f"{epoch=}.png")
+        ax = fig.add_subplot(1, 1, 1, aspect="equal")
+        spines_plot(H, W, spines, ax)
+        frames.append(ax.get_children())
 
         if len(cp) == 0:
+            logger.debug("iteration end")
             break
 
         # obj1, obj2の重なりによる更新量を求める
@@ -53,12 +61,15 @@ def relaxation(H, W, L, N) -> list[Spine]:
         if logger.level == logging.DEBUG:
             for key, value in deltas_dict.items():
                 logger.debug(f"update {key.identifier=}, {value=}")
+
         # 更新量にしたがって更新する。
         apply_update(deltas_dict, pos_epsilon, angle_epsilon)
 
         # 接触情報を更新
         cp = list(cm.contact_pairs())
 
+    ani = animation.ArtistAnimation(fig, frames, interval=100)
+    ani.save("relaxation.gif", writer="imagemagick")
     return spines
 
 
