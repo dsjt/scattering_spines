@@ -6,7 +6,7 @@ import logging
 import geometry
 from collections import defaultdict
 from spine import Spine
-from utils import sign
+from utils import sign, myAnimation
 from general import random_spines, display, spines_plot
 from geometry import Point, iSP
 from contact_manager import ContactManager
@@ -38,38 +38,35 @@ def relaxation(H, W, L, N) -> list[Spine]:
     for spine in spines:
         cm.register(spine)
 
-    fig = plt.figure(figsize=(8, 6))
-    frames = []
-    cp = list(cm.contact_pairs())
-    for epoch in range(max_iteration):
-        logger.debug(f"{epoch=}")
-        ax = fig.add_subplot(1, 1, 1, aspect="equal")
-        spines_plot(H, W, spines, ax)
-        frames.append(ax.get_children())
-
-        if len(cp) == 0:
-            logger.debug("iteration end")
-            break
-
-        # obj1, obj2の重なりによる更新量を求める
-        deltas_dict = defaultdict(lambda: Spine(Point(0, 0), 0, 0))
-        for obj1, obj2 in cp:
-            update = calc_delta(obj1, obj2)
-            for key, val in update.items():
-                deltas_dict[key] += val
-
-        if logger.level == logging.DEBUG:
-            for key, value in deltas_dict.items():
-                logger.debug(f"update {key.identifier=}, {value=}")
-
-        # 更新量にしたがって更新する。
-        apply_update(deltas_dict, pos_epsilon, angle_epsilon)
-
-        # 接触情報を更新
+    with myAnimation("relaxation.gif", figsize=(8, 6)) as ani:
         cp = list(cm.contact_pairs())
+        for epoch in range(max_iteration):
+            logger.debug(f"{epoch=}")
 
-    ani = animation.ArtistAnimation(fig, frames, interval=100)
-    ani.save("relaxation.gif", writer="imagemagick")
+            ax = ani.add_subplot(1, 1, 1, aspect="equal")
+            ani.frames.append(spines_plot(H, W, spines, ax).get_children())
+
+            if len(cp) == 0:
+                logger.debug("iteration end")
+                break
+
+            # obj1, obj2の重なりによる更新量を求める
+            deltas_dict = defaultdict(lambda: Spine(Point(0, 0), 0, 0))
+            for obj1, obj2 in cp:
+                update = calc_delta(obj1, obj2)
+                for key, val in update.items():
+                    deltas_dict[key] += val
+
+            if logger.level == logging.DEBUG:
+                for key, value in deltas_dict.items():
+                    logger.debug(f"update {key.identifier=}, {value=}")
+
+            # 更新量にしたがって更新する。
+            apply_update(deltas_dict, pos_epsilon, angle_epsilon)
+
+            # 接触情報を更新
+            cp = list(cm.contact_pairs())
+
     return spines
 
 

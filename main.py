@@ -26,7 +26,7 @@ def main():
     # 針一本の長さ
     L = 3
     # 針の本数
-    N = 40
+    N = 60
 
     spines = relaxation(H, W, L, N)
     display(H, W, spines, fn="output.png")
