@@ -9,11 +9,13 @@ from spine import Spine
 from general import random_spines, display
 from contact_manager import ContactManager
 from relaxation import relaxation
+from anealing import anealing
 
 logging.basicConfig(level=logging.WARNING)
 logger_levels = {
     "main": logging.DEBUG,
-    "relaxation": logging.DEBUG
+    "relaxation": logging.DEBUG,
+    "anealing": logging.DEBUG
 }
 for mn, level in logger_levels.items():
     logging.getLogger(mn).setLevel(level)
@@ -28,7 +30,8 @@ def main():
     # 針の本数
     N = 60
 
-    spines = relaxation(H, W, L, N)
+    # spines = relaxation(H, W, L, N)
+    spines = anealing(H, W, L, N)
     display(H, W, spines, fn="output.png")
     return
 
