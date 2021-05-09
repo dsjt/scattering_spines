@@ -2,8 +2,14 @@
 
 * 出力例
 
-緩和
+** 緩和
+
 [[file:sample/relaxation.gif]]
 
-アニーリング
+[[file:sample/relaxation_last.png]]
+
+
+** アニーリング
 [[file:sample/anealing.gif]]
+
+[[file:sample/anealing_last.png]]
