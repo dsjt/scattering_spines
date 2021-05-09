@@ -1,0 +1,9 @@
+* 概要
+
+* 出力例
+
+緩和
+[[file:sample/relaxation.gif]]
+
+アニーリング
+[[file:sample/anealing.gif]]
