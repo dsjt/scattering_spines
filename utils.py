@@ -7,7 +7,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class myFigure(matplotlib.figure.Figure):
+class FigureWrapper(matplotlib.figure.Figure):
     def __init__(self, fn, **kwargs):
         self.fn = fn
         super().__init__(**kwargs)
@@ -21,8 +21,8 @@ class myFigure(matplotlib.figure.Figure):
         self.savefig(self.fn)
         plt.close(self)
         if exception_type is not None:
-            print("Error has occurred.")
-            print(exception_type, exception_value, traceback)
+            logging.error("Error has occurred.")
+            logging.error(exception_type, exception_value, traceback)
         return
 
 def sign(x):
@@ -49,6 +49,6 @@ class myAnimation(matplotlib.figure.Figure):
         ani.save(self.fn, writer="imagemagick")
         plt.close(self)
         if exception_type is not None:
-            print("Error has occurred.")
-            print(exception_type, exception_value, traceback)
+            logging.error("Error has occurred.")
+            logging.error(exception_type, exception_value, traceback)
         return

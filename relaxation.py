@@ -23,7 +23,7 @@ def relaxation(H, W, L, N) -> list[Spine]:
     度を更新する。手順２の最初に戻る
 
     問題点：
-    - 局所解に陥った場合に抜け出す手段がないため、最初からやり直す必要がある。
+    - 局所安定に陥った場合に抜け出す手段がない。
     - 収束までに要する時間を見積もる方法がわからない
     """
     # 更新量を制御するグローバルパラメータ
@@ -40,11 +40,12 @@ def relaxation(H, W, L, N) -> list[Spine]:
 
     with myAnimation("relaxation.gif", figsize=(8, 6)) as ani:
         cp = list(cm.contact_pairs())
-        for epoch in range(max_iteration):
-            logger.debug(f"{epoch=}")
 
-            ax = ani.add_subplot(1, 1, 1, aspect="equal")
-            ani.frames.append(spines_plot(H, W, spines, ax).get_children())
+        ax = ani.add_subplot(1, 1, 1, aspect="equal")
+        ani.frames.append(spines_plot(H, W, spines, ax).get_children())
+
+        for epoch in range(max_iteration):
+            logger.debug(f"{epoch=}/{max_iteration}")
 
             if len(cp) == 0:
                 logger.debug("iteration end")
@@ -63,6 +64,10 @@ def relaxation(H, W, L, N) -> list[Spine]:
 
             # 更新量にしたがって更新する。
             apply_update(deltas_dict, pos_epsilon, angle_epsilon)
+
+            # 描画
+            ax = ani.add_subplot(1, 1, 1, aspect="equal")
+            ani.frames.append(spines_plot(H, W, spines, ax).get_children())
 
             # 接触情報を更新
             cp = list(cm.contact_pairs())
