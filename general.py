@@ -7,7 +7,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from spine import Spine
 from geometry import Point
-from utils import myFigure
+from utils import AutoSaveFigure
 
 logger = logging.getLogger(__name__)
 random.seed(0)
@@ -16,21 +16,25 @@ def random_spines(H, W, L, N) -> list[Spine]:
     """
     交差を許してランダムに針の位置を決める。
     """
-    ret = []
-    for i in range(N):
-        x = random.uniform(0, W)
-        y = random.uniform(0, H)
-        center = Point(x, y)
-        theta = random.uniform(0, math.pi)
-        logger.debug(f"random_spines {i}th {x=:.3f}, {y=:.3f}, {theta=:.3f}")
-        ret.append(Spine(center, theta, L, identifier=f"{i}"))
-    return ret
+    return [random_spine(H, W, L, identifier=f"{i}") for i in range(N)]
+
+def random_spine(H, W, L, identifier=None) -> Spine:
+    """
+    ランダムに針の位置を決める
+    """
+    x = random.uniform(0, W)
+    y = random.uniform(0, H)
+    center = Point(x, y)
+    theta = random.uniform(0, math.pi)
+    logger.debug(f"random_spines {identifier=} {x=:.3f}, {y=:.3f}, {theta=:.3f}")
+    return Spine(center, theta, L, identifier=identifier)
+
 
 def display(h, w, spines: list[Spine], fn="tmp.png"):
     """
     針の状態を一枚の画像で保存する
     """
-    with myFigure(fn=fn) as fig:
+    with AutoSaveFigure(fn=fn) as fig:
         ax = fig.add_subplot(1, 1, 1, aspect="equal")
         spines_plot(h, w, spines, ax)
     return

@@ -7,7 +7,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class FigureWrapper(matplotlib.figure.Figure):
+class AutoSaveFigure(matplotlib.figure.Figure):
     def __init__(self, fn, **kwargs):
         self.fn = fn
         super().__init__(**kwargs)
@@ -33,7 +33,7 @@ def sign(x):
     else:
         return 0
 
-class myAnimation(matplotlib.figure.Figure):
+class AutoSaveAnimation(matplotlib.figure.Figure):
     def __init__(self, fn, **kwargs):
         self.fn = fn
         super().__init__(**kwargs)

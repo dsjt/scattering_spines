@@ -6,7 +6,7 @@ import logging
 import geometry
 from collections import defaultdict
 from spine import Spine
-from utils import sign, myAnimation
+from utils import sign, AutoSaveAnimation
 from general import random_spines, display, spines_plot
 from geometry import Point, iSP
 from contact_manager import ContactManager
@@ -38,7 +38,7 @@ def relaxation(H, W, L, N) -> list[Spine]:
     for spine in spines:
         cm.register(spine)
 
-    with myAnimation("relaxation.gif", figsize=(8, 6)) as ani:
+    with AutoSaveAnimation("relaxation.gif", figsize=(8, 6)) as ani:
         cp = list(cm.contact_pairs())
 
         ax = ani.add_subplot(1, 1, 1, aspect="equal")
@@ -70,6 +70,8 @@ def relaxation(H, W, L, N) -> list[Spine]:
             ani.frames.append(spines_plot(H, W, spines, ax).get_children())
 
             # 接触情報を更新
+            for spine in spines:
+                cm.update(spine)
             cp = list(cm.contact_pairs())
 
     return spines
