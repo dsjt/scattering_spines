@@ -70,7 +70,7 @@ def relaxation(H, W, L, N) -> list[Spine]:
             ani.frames.append(spines_plot(H, W, spines, ax).get_children())
 
             # 接触情報を更新
-            for spine in spines:
+            for spine in deltas_dict:
                 cm.update(spine)
             cp = list(cm.contact_pairs())
 
