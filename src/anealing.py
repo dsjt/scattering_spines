@@ -26,7 +26,7 @@ def anealing(H, W, L, N) -> list[Spine]:
     アニーリングによってエネルギー０を目指すアプローチで針の位置・向きを求める。
     """
     # 最大反復回数を制御するグローバルパラメータ
-    max_iteration = 300
+    max_iteration = 3000
 
     # ランダムな生成
     spines = random_spines(H, W, L, N)
