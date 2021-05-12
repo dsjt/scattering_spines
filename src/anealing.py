@@ -62,17 +62,17 @@ def anealing(H, W, L, N) -> list[Spine]:
                 + len([s for s in cm.overlapped_objects_with_new(spine)
                        if s != orig_spine])
 
-            if next_e < best_e:
-                best_e = next_e
-                # ここ、next_stateを使うべきだができないため
-                best_state = copy.deepcopy(spines)
-
             prob = probability(e, next_e, temperature(epoch/max_iteration))
             if random.uniform(0, 1) <= prob:
                 # 置き換える
                 orig_spine.update(spine.center, spine.theta, spine.l)
                 e = next_e
                 cm.update(orig_spine)
+
+                if e < best_e:
+                    best_e = e
+                    best_state = copy.deepcopy(spines)
+
                 if e < EPS:
                     break
 
@@ -80,7 +80,7 @@ def anealing(H, W, L, N) -> list[Spine]:
                 logger.debug(f"{e=:.3f}")
 
             # 描画
-            if epoch % (max_iteration//20) == 0:
+            if epoch % (max_iteration//40) == 0:
                 ax = ani.add_subplot(1, 1, 1, aspect="equal")
                 ani.frames.append(spines_plot(H, W, spines, ax).get_children())
 
