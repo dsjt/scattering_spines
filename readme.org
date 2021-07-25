@@ -10,14 +10,18 @@
 
 ** 緩和
 
+生成プロセスの可視化
 [[file:sample/relaxation.gif]]
 
+生成結果
 [[file:sample/relaxation_last.png]]
 
 
 ** アニーリング
+生成プロセスの可視化
 [[file:sample/anealing.gif]]
 
+生成結果
 [[file:sample/anealing_last.png]]
 
 * 課題
